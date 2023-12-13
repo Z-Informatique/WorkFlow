@@ -1,0 +1,44 @@
+﻿@using System.ComponentModel.DataAnnotations
+@page "/"
+
+<PageTitle>Home</PageTitle>
+
+<MudGrid>
+    <MudItem xs="12" sm="12">
+        <MudCard Elevation="5">
+            <MudCardContent>
+                <MudTextField Label="Rôle"
+                              @bind-Value="Role" />
+
+                @if (DataSource.Count > 0)
+                {
+                    <MudSelect T="string" Label="Rattacher à"
+                               Variant="Variant.Outlined"
+                               AnchorOrigin="Origin.BottomCenter" @bind-Value="Team">
+                        @foreach (var data in DataSource)
+                        {
+                            <MudSelectItem T="string" Value="@(data.Id)">@data.Role</MudSelectItem>
+                        }
+                    </MudSelect>
+                }
+                <MudColorPicker Label="Couleur" @bind-Value="Couleur"/>
+            </MudCardContent>
+            <MudCardActions>
+                <MudButton OnClick="@OnValidSubmit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Enregistrer</MudButton>
+            </MudCardActions>
+        </MudCard>
+
+    </MudItem>
+</MudGrid>
+
+<MudDivider Class="mt-4 mb-4"/>
+
+<SfDiagramComponent @ref="@Diagram" Height="600px" NodeCreating="@OnNodeCreating" ConnectorCreating="@OnConnectorCreating">
+    <DataSourceSettings ID="Id" ParentID="Team" DataSource="@DataSource"></DataSourceSettings>
+    
+    <Layout Type="LayoutType.OrganizationalChart" 
+    Orientation="LayoutOrientation.TopToBottom"
+    @bind-HorizontalSpacing="@HorizontalSpacing" 
+    @bind-VerticalSpacing="@VerticalSpacing" GetLayoutInfo="GetLayoutInfo">
+    </Layout>
+</SfDiagramComponent>
